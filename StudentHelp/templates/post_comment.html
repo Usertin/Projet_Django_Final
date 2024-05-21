@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .blue-text {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navbar2.html' %}
+    <div class="container">
+        <h1 class="mt-4 mb-4">{{ post }}</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mb-4">
+
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ post.user.userprofile.image.url }}" class="rounded-circle mr-2" width="40" height="40" alt="User Image">
+                            <span class="font-weight">{{ post.user.userprofile.nom }} {{ post.user.userprofile.prenom }}</span>
+                        </div>
+                    </div>
+                    {%if post.image %}
+                    <img src="{{ post.image.url }}" class="card-img-top" alt="Post Image">
+                    {%endif%}
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            {% if post.post_type == 'Stage' %}
+                                {{ post.subject }}
+                            {% elif post.post_type == 'Logement' %}
+                                {{ post.localisation }}
+                            {% elif post.post_type == 'Transport' %}
+                                From: {{ post.depart }} - To: {{ post.destination }}
+                            {% elif post.post_type == 'Recommandation' %}
+                                Recommendation
+                            {% elif post.post_type == 'Evenement' %}
+                                {{ post.intitule }} at {{ post.lieu }}
+                            {% endif %}
+                        </h2>
+                        <p class="card-text text-muted">{{ post.date }}</p>
+                        <p class="card-text">{{ post.description }}</p>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        Comments
+                    </div>
+                    <div class="card-body" id="comments">
+                        {% for comment in comments %}
+                        <div class="media mb-3">
+                            <img src="{{ comment.user.userprofile.image.url }}" class="mr-3 rounded-circle" width="40" height="40" alt="User Image">
+                            <div class="media-body">
+                                <h5 class="mt-0">{{ comment.user.username }} </h5>
+                                <span class="comment-text">{{ comment.comment }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <form method="post" action="{% url 'add_comment' post.id %}">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="comment">Add Comment:</label>
+                                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var commentTexts = document.querySelectorAll('.comment-text');
+            commentTexts.forEach(function(element) {
+                var words = element.textContent.split(' ');
+                for (var i = 0; i < words.length; i++) {
+                    if (words[i].startsWith('@')) {
+                        words[i] = '<span class="blue-text">' + words[i] + '</span>';
+                    }
+                }
+                element.innerHTML = words.join(' ');
+            });
+        });
+    </script>
+    {% include 'footer.html' %}
+</body>
+
+</html>

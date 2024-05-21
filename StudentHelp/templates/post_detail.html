@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Posts</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    {% include 'navbar2.html' %}
+    <div class="container">
+        <h1 class="mt-4">My Posts</h1>
+        {% for post in user_profile.user.post_set.all %}
+            <div class="card my-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post }}</h5>
+                    <p class="card-text">Post Type: {{ post.post_type }}</p>
+                    <p class="card-text">Date: {{ post.date }}</p>
+                    {% if post.image %} 
+                        <img src="{{ post.image.url }}" class="card-img-top" alt="Post Image">
+                    {% endif %}
+                    {% if post.post_type == 'Evenement' %}
+                        <p class="card-text">Event Subtype: {{ post.evenement.get_subtype_display }}</p>
+                    {% endif %}
+                    <a href="{% url 'update_post' post_id=post.id %}" class="btn btn-primary mr-2">Update</a>
+                    <a href="{% url 'delete_post' post_id=post.id %}" class="btn btn-danger">Delete</a>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-primary like-btn" data-post-id="{{ post.id }}"><i class="far fa-thumbs-up"></i> Like</button>
+                    <span id="likesCount{{ post.id }}">{{ post.likes }}</span>
+                    <a href="{% url 'post_comment' post.id %}" class="btn btn-secondary"><i class="far fa-comment"></i>.  Comments</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No posts found.</p>
+        {% endfor %}
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html>

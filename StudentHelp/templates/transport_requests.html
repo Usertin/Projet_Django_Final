@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport Requests</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .request-card {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            width: 1000%;
+            max-width: 400px;
+        }
+        .user-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+
+        <div class="mx-auto">
+            {% for request in transport_requests %}
+                <div class="card request-card">
+                    <div class="media">
+
+                        <div class="media-body">
+                            <h5 class="mt-0">{{ request.name }}</h5>
+                            <p>Phone Number: {{ request.phone_number }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No transport requests found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

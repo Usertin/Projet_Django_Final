@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin-top: 70px;
+            color: #1a202c;
+            text-align: left;
+            background-color: #e2e8f0;
+        }
+        .main-body {
+            padding: 15px;
+        }
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .user-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .user-info h4 {
+            margin-bottom: 0;
+        }
+        .user-info p {
+            margin-top: 5px;
+        }
+        .post-card {
+            margin-bottom: 20px;
+        }
+        .post-buttons {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar2.html'%}
+    <div class="container" style="margin-left: 300px;">
+        <div class="main-body">
+            <div class="row gutters-sm">
+                <!--<div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="{{ user_profile.image.url }}" alt="Profile Image" class="rounded-circle profile-image">
+                                <div class="user-info">
+                                    <h4>{{ user_profile.nom }} {{ user_profile.prenom }}</h4>
+                                    <p>Phone number : {{ user_profile.telephone }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="col-md-8">
+                    {% for post in user_profile.user.post_set.all %}
+                        <div class="card post-card">
+                            {% if post.image %} 
+                                <img src="{{ post.image.url }}" class="card-img-top" alt="Post Image">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post }}</h5>
+                                <p class="card-text">Post Type: {{ post.post_type }}</p>
+                                <div class="post-buttons">
+                                    <a href="{% url 'update_post' post_id=post.id %}" class="btn btn-primary" style="width: 100%;">Update</a>
+                                    <a href="{% url 'delete_post' post_id=post.id %}" class="btn btn-danger" style="width: 100%;">Delete</a>
+                                    {% if post.post_type == 'Transport' %}
+                                        {% if post.transportrequest_set.all %}
+                                            <a href="{% url 'transport_requests' post_id=post.id %}" class="btn btn-info">View Transport Requests</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="text-center">
+                                    <i class="far fa-thumbs-up"></i> Likes: 
+                                    <span id="likesCount{{ post.id }}" style="margin-right: 200px;">{{ post.likes }}</span>
+                                    <a href="{% url 'post_comment' post.id %}" style="text-decoration: none;color: black;"><i class="far fa-comment"></i> Comments</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>No posts found.</p>
+                    {% endfor %}
+                    </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+</body>
+</html

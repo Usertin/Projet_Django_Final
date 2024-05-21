@@ -1,0 +1,30 @@
+
+
+{%load static%}
+
+<head>
+	<meta charset="utf-8">
+	<title>Logout</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="{%static 'css/logout.css'%}">
+</head>
+
+<body ng-app="logoutApp" ng-controller="logoutController">
+	<div class="background-photo">
+		<div class="jumbotron">
+			<div class="container">
+				<h1>Au revoir!</h1>
+			</div>
+
+		</div>
+		<div class="middle-block">
+      <div ng-if="!loadingShowed">
+        <h2 style="color: #2F1C36;">Vous êtes déconnecté. </h2>
+        <a href="{% url 'login' %}" style="text-decoration: none;color: #2F1C36;font-size: larger;"><b>>Se reconnecter</b></a>
+      </div>
+		</div>
+	</div>
+	</div>
+</body>
+</html>
